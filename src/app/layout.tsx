@@ -9,14 +9,21 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio — Engineering the Future",
+  title: "Maksymilian Dubowski — Aerospace Engineering & Operations",
   description:
-    "Aerospace engineer and creative technologist pushing the boundaries of what's possible.",
-  keywords: ["aerospace", "engineer", "portfolio", "technology", "innovation"],
+    "Aerospace engineering student at Heriot-Watt University. Future commercial pilot. Systems thinker with experience in property management, software engineering, and design.",
+  keywords: [
+    "aerospace engineering",
+    "commercial pilot",
+    "Heriot-Watt",
+    "Edinburgh",
+    "portfolio",
+    "Maksymilian Dubowski",
+  ],
   openGraph: {
-    title: "Portfolio — Engineering the Future",
+    title: "Maksymilian Dubowski — Aerospace Engineering & Operations",
     description:
-      "Aerospace engineer and creative technologist pushing the boundaries of what's possible.",
+      "Aerospace engineering student. Future commercial pilot. Systems thinker.",
     type: "website",
   },
   robots: "index, follow",
@@ -28,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased noise`}>
+    <html lang="en">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

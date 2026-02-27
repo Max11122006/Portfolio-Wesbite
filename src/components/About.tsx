@@ -6,62 +6,68 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-32 md:py-48 px-6 overflow-hidden"
+      className="relative py-24 md:py-36 px-6 section-divide"
     >
-      {/* Background lighting shift */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/[0.02] to-transparent" />
-
-      <div className="relative z-10 max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <FadeIn>
-          <p className="text-sm tracking-[0.3em] uppercase text-accent/60 mb-8">
+          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6">
             About
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.1}>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-12">
-            Where precision meets{" "}
-            <span className="gradient-text">imagination</span>
-          </h2>
-        </FadeIn>
-
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-          <FadeIn delay={0.2}>
-            <p className="text-lg text-muted leading-relaxed">
-              I operate at the intersection of aerospace engineering and digital
-              innovation. With a foundation in systems design and propulsion
-              theory, I bring analytical rigor to every creative challenge.
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.3}>
-            <p className="text-lg text-muted leading-relaxed">
-              My work spans from computational fluid dynamics to interactive 3D
-              experiences — always seeking the elegant solution hidden within
-              complex problems. Every project is an opportunity to push further.
-            </p>
-          </FadeIn>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-12 border-t border-white/5">
-          {[
-            { value: "5+", label: "Years Experience" },
-            { value: "30+", label: "Projects Delivered" },
-            { value: "12", label: "Technologies" },
-            { value: "∞", label: "Curiosity" },
-          ].map((stat, i) => (
-            <FadeIn key={stat.label} delay={0.1 * i}>
-              <div className="text-center md:text-left">
-                <p className="text-3xl md:text-4xl font-bold gradient-text mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-sm text-muted tracking-wide">
-                  {stat.label}
-                </p>
-              </div>
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-start">
+          {/* Text — 3 cols */}
+          <div className="lg:col-span-3 space-y-8">
+            <FadeIn delay={0.1}>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-foreground">
+                Systems-level thinking.
+                <br />
+                <span className="text-accent">Operational precision.</span>
+              </h2>
             </FadeIn>
-          ))}
+
+            <FadeIn delay={0.2}>
+              <p className="text-base md:text-lg text-muted leading-relaxed max-w-xl">
+                I&apos;m Maksymilian Dubowski — an aerospace engineering student
+                at Heriot-Watt University with a trajectory set toward commercial
+                aviation. My approach is rooted in disciplined analysis,
+                structured decision-making, and a long-term operational mindset.
+              </p>
+            </FadeIn>
+
+            <FadeIn delay={0.3}>
+              <p className="text-base md:text-lg text-muted leading-relaxed max-w-xl">
+                Beyond the classroom, I manage a private residential property
+                portfolio in Edinburgh — handling tenant relations, maintenance
+                coordination, and financial oversight. This experience in
+                real-world asset management has sharpened my ability to operate
+                under uncertainty, prioritise effectively, and maintain
+                accountability across complex systems.
+              </p>
+            </FadeIn>
+
+            <FadeIn delay={0.35}>
+              <p className="text-sm text-muted/70">
+                Bilingual — English & Polish (native proficiency)
+              </p>
+            </FadeIn>
+          </div>
+
+          {/* Portrait placeholder — 2 cols */}
+          <FadeIn delay={0.3} direction="right" className="lg:col-span-2">
+            <div className="aspect-[4/5] rounded-xl bg-gradient-to-br from-surface-alt to-border-light border border-border flex items-end justify-center overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
+              <div className="relative pb-8 text-center">
+                <div className="w-20 h-20 rounded-full bg-surface-alt border border-border mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-accent/60">MD</span>
+                </div>
+                <p className="text-sm font-medium text-foreground">
+                  Maksymilian Dubowski
+                </p>
+                <p className="text-xs text-muted mt-1">Edinburgh, Scotland</p>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>

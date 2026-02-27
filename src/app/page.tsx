@@ -7,13 +7,14 @@ import About from "@/components/About";
 import Footer from "@/components/Footer";
 
 // Lazy load heavier sections
+const Experience = lazy(() => import("@/components/Experience"));
 const Projects = lazy(() => import("@/components/Projects"));
 const Interactive3D = lazy(() => import("@/components/Interactive3D"));
 const Skills = lazy(() => import("@/components/Skills"));
 const Contact = lazy(() => import("@/components/Contact"));
 
 function SectionFallback() {
-  return <div className="min-h-[50vh]" />;
+  return <div className="min-h-[40vh]" />;
 }
 
 export default function Home() {
@@ -22,6 +23,9 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
+      <Suspense fallback={<SectionFallback />}>
+        <Experience />
+      </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <Projects />
       </Suspense>
