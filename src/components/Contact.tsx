@@ -11,8 +11,8 @@ export default function Contact() {
     >
       <div className="max-w-2xl mx-auto">
         <FadeIn>
-          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 text-center">
-            Contact
+          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 text-center font-mono">
+            // CONTACT
           </p>
         </FadeIn>
 

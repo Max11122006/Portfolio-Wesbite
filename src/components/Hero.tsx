@@ -18,15 +18,16 @@ export default function Hero() {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Subtle gradient background */}
+      {/* Engineering grid background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-white via-background to-background" />
+        <div className="absolute inset-0 schematic-grid opacity-40" />
         <motion.div
           animate={{
             background: [
-              "radial-gradient(ellipse 70% 40% at 50% 45%, rgba(61,107,153,0.04) 0%, transparent 70%)",
-              "radial-gradient(ellipse 60% 50% at 55% 50%, rgba(61,107,153,0.06) 0%, transparent 70%)",
-              "radial-gradient(ellipse 70% 40% at 45% 45%, rgba(61,107,153,0.04) 0%, transparent 70%)",
+              "radial-gradient(ellipse 70% 40% at 50% 45%, rgba(45,106,79,0.05) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 50% at 55% 50%, rgba(45,106,79,0.08) 0%, transparent 70%)",
+              "radial-gradient(ellipse 70% 40% at 45% 45%, rgba(45,106,79,0.05) 0%, transparent 70%)",
             ],
           }}
           transition={{
@@ -49,9 +50,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-xs md:text-sm tracking-[0.25em] uppercase text-muted mb-8"
+          className="text-xs md:text-sm tracking-[0.25em] uppercase text-muted mb-8 font-mono"
         >
-          Edinburgh, Scotland
+          // Edinburgh, Scotland
         </motion.p>
 
         {/* Headline */}

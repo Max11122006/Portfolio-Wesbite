@@ -53,8 +53,8 @@ export default function Skills() {
     >
       <div className="max-w-6xl mx-auto">
         <FadeIn>
-          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6">
-            Capabilities
+          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 font-mono">
+            // CAPABILITIES
           </p>
         </FadeIn>
 
@@ -70,21 +70,24 @@ export default function Skills() {
         >
           {skills.map((group) => (
             <StaggerItem key={group.category}>
-              <div className="p-6 rounded-xl bg-surface border border-border h-full">
-                <h3 className="text-xs tracking-[0.2em] uppercase text-accent font-medium mb-5">
-                  {group.category}
-                </h3>
-                <ul className="space-y-3">
-                  {group.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-2.5 text-sm text-muted leading-relaxed"
-                    >
-                      <span className="w-1 h-1 rounded-full bg-accent/40 shrink-0 mt-2" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+              <div className="breadboard-card h-full">
+                <div className="through-holes" />
+                <div className="card-inner p-6">
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-emerald-300/60 font-medium font-mono mb-5">
+                    {group.category}
+                  </h3>
+                  <ul className="space-y-3">
+                    {group.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-sm text-emerald-100/60 leading-relaxed"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-copper shrink-0 mt-1.5" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </StaggerItem>
           ))}

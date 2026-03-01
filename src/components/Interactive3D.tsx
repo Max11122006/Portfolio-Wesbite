@@ -23,8 +23,8 @@ export default function Interactive3D() {
           {/* Text */}
           <div>
             <FadeIn>
-              <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6">
-                Vision
+              <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 font-mono">
+                // VISION
               </p>
             </FadeIn>
 

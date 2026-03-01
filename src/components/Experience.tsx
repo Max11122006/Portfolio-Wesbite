@@ -75,8 +75,8 @@ export default function Experience() {
     >
       <div className="max-w-4xl mx-auto">
         <FadeIn>
-          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6">
-            Experience
+          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 font-mono">
+            // EXPERIENCE
           </p>
         </FadeIn>
 
