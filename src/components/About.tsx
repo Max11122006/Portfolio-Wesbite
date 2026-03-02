@@ -10,7 +10,7 @@ export default function About() {
     >
       <div className="max-w-6xl mx-auto">
         <FadeIn>
-          <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 font-mono">
+          <p className="text-xs tracking-[0.3em] uppercase text-muted mb-6 font-mono">
             // ABOUT
           </p>
         </FadeIn>
@@ -19,10 +19,10 @@ export default function About() {
           {/* Text — 3 cols */}
           <div className="lg:col-span-3 space-y-8">
             <FadeIn delay={0.1}>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-foreground">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-foreground">
                 Systems-level thinking.
                 <br />
-                <span className="text-accent">Operational precision.</span>
+                <span className="gradient-text">Operational precision.</span>
               </h2>
             </FadeIn>
 
@@ -47,7 +47,7 @@ export default function About() {
             </FadeIn>
 
             <FadeIn delay={0.35}>
-              <p className="text-sm text-muted/70">
+              <p className="text-sm text-muted/50 font-mono">
                 Bilingual — English & Polish (native proficiency)
               </p>
             </FadeIn>
@@ -55,11 +55,13 @@ export default function About() {
 
           {/* Portrait placeholder — 2 cols */}
           <FadeIn delay={0.3} direction="right" className="lg:col-span-2">
-            <div className="aspect-[4/5] rounded-xl bg-gradient-to-br from-surface-alt to-border-light border border-border flex items-end justify-center overflow-hidden relative">
-              <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent" />
+            <div className="aspect-[4/5] rounded-xl bg-gradient-to-br from-surface-alt to-surface border border-border flex items-end justify-center overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+              {/* Subtle grid overlay */}
+              <div className="absolute inset-0 grid-bg opacity-30" />
               <div className="relative pb-8 text-center">
-                <div className="w-20 h-20 rounded-full bg-surface-alt border border-border mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-accent/60">MD</span>
+                <div className="w-20 h-20 rounded-full bg-surface-elevated border border-border mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-2xl font-bold gradient-text">MD</span>
                 </div>
                 <p className="text-sm font-medium text-foreground">
                   Maksymilian Dubowski

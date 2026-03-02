@@ -32,15 +32,15 @@ export default function AerospaceObject() {
     <group ref={meshRef}>
       {/* Wireframe edges */}
       <lineSegments geometry={edgesGeometry}>
-        <lineBasicMaterial color="#c0c0c0" transparent opacity={0.5} />
+        <lineBasicMaterial color="#60a5fa" transparent opacity={0.3} />
       </lineSegments>
 
       {/* Very faint fill for depth */}
       <mesh geometry={geometry}>
         <meshBasicMaterial
-          color="#e8e8e8"
+          color="#60a5fa"
           transparent
-          opacity={0.03}
+          opacity={0.02}
           side={THREE.DoubleSide}
         />
       </mesh>

@@ -66,8 +66,6 @@ const personalProjects: PersonalProject[] = [
       { title: "Brake pad & rotor replacement", done: true },
       { title: "Suspension inspection & bushing refresh", done: true },
       { title: "Cold air intake install", done: false },
-      { title: "Coilover suspension upgrade", done: false },
-      { title: "ECU remap / Stage 1 tune", done: false },
     ],
   },
 ];

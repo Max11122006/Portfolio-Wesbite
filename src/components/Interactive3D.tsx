@@ -15,8 +15,8 @@ const Scene = dynamic(() => import("./three/Scene"), {
 export default function Interactive3D() {
   return (
     <section className="relative py-24 md:py-36 overflow-hidden">
-      {/* Very subtle top gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-surface-alt/30 to-background pointer-events-none" />
+      {/* Very subtle gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-surface/30 to-background pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -31,7 +31,7 @@ export default function Interactive3D() {
             <FadeIn delay={0.1}>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-foreground mb-6">
                 Built for the{" "}
-                <span className="text-accent">long trajectory.</span>
+                <span className="gradient-text">long trajectory.</span>
               </h2>
             </FadeIn>
 
