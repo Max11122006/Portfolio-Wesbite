@@ -1,17 +1,25 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0a0a0c;
-  --color-foreground: #e8e8ec;
-  --color-accent: #60a5fa;
-  --color-accent-light: #93c5fd;
-  --color-surface: #111114;
-  --color-surface-alt: #18181c;
-  --color-surface-elevated: #1e1e24;
-  --color-muted: #71717a;
-  --color-border: #27272a;
-  --color-border-light: #1e1e22;
-  --color-glow: rgba(96, 165, 250, 0.08);
+  --color-background: #f5f5f0;
+  --color-foreground: #1a1a1a;
+  --color-accent: #2d6a4f;
+  --color-accent-light: #40916c;
+  --color-surface: #ffffff;
+  --color-surface-alt: #eaeae5;
+  --color-muted: #6b7280;
+  --color-border: #d4d4cc;
+  --color-border-light: #e8e8e0;
+  --color-pcb-green: #1b5e20;
+  --color-pcb-green-light: #2e7d32;
+  --color-pcb-surface: #1a3a1a;
+  --color-copper: #b87333;
+  --color-copper-light: #d4956a;
+  --color-solder: #c0c0c0;
+  --color-led-red: #ef4444;
+  --color-led-green: #22c55e;
+  --color-led-blue: #3b82f6;
+  --color-led-yellow: #eab308;
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", monospace;
 }
@@ -38,17 +46,17 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #999;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #777;
 }
 
 ::selection {
-  background: rgba(96, 165, 250, 0.25);
-  color: #fff;
+  background: rgba(45, 106, 79, 0.2);
+  color: #1a1a1a;
 }
 
 /* Section divider */
@@ -69,103 +77,195 @@ body {
   width: 100%;
   height: 2px;
   background: var(--color-accent);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-/* ===== DARK CARD STYLES ===== */
+/* ===== SOLDERLESS BREADBOARD CARD STYLES ===== */
 
-.dark-card {
+.breadboard-card {
   position: relative;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  background: #f5f2eb;
+  border: 2px solid #d0cdc5;
+  border-radius: 6px;
   overflow: hidden;
   color: var(--color-foreground);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-.dark-card:hover {
-  border-color: rgba(96, 165, 250, 0.2);
-  box-shadow: 0 0 40px rgba(96, 165, 250, 0.05);
+/* Hole grid pattern — the classic breadboard dots */
+.breadboard-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, #c8c4ba 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  background-position: 7px 7px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
 }
 
-.dark-card .card-inner {
+/* Center channel gap (the DIP IC trough) */
+.breadboard-card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  background: #ddd8ce;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  z-index: 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.breadboard-card .card-inner {
   position: relative;
   z-index: 2;
 }
 
-/* Subtle grid background for sections */
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(96, 165, 250, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(96, 165, 250, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+/* Power rails — red and blue stripes on top and bottom */
+.power-rails-top,
+.power-rails-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  z-index: 1;
+  display: flex;
 }
 
-/* Noise texture overlay */
-.noise-overlay::before {
+.power-rails-top {
+  top: 0;
+}
+
+.power-rails-bottom {
+  bottom: 0;
+}
+
+.power-rail-red {
+  flex: 1;
+  background: #dc2626;
+  opacity: 0.7;
+}
+
+.power-rail-blue {
+  flex: 1;
+  background: #2563eb;
+  opacity: 0.7;
+}
+
+/* LED indicator dot */
+.led-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 6px currentColor, 0 0 12px currentColor;
+  animation: led-pulse 3s ease-in-out infinite;
+}
+
+@keyframes led-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* Component tag — like a chip sitting on the breadboard */
+.component-tag {
+  background: #2a2a2a;
+  color: #d4d4d4;
+  border: 1px solid #444;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 2px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Tiny "pin" dots on chip sides */
+.component-tag::before,
+.component-tag::after {
   content: "";
   position: absolute;
+  top: 50%;
+  width: 3px;
+  height: 3px;
+  background: #888;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.component-tag::before { left: -5px; }
+.component-tag::after { right: -5px; }
+
+/* Jumper wire tag — coloured wire on the board */
+.jumper-wire {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  display: inline-block;
+  font-weight: 500;
+  border: 1.5px solid;
+}
+
+.jumper-wire--red { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
+.jumper-wire--blue { background: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
+.jumper-wire--green { background: #f0fdf4; color: #15803d; border-color: #86efac; }
+.jumper-wire--yellow { background: #fefce8; color: #a16207; border-color: #fde047; }
+.jumper-wire--orange { background: #fff7ed; color: #c2410c; border-color: #fdba74; }
+.jumper-wire--purple { background: #faf5ff; color: #7e22ce; border-color: #c4b5fd; }
+.jumper-wire--black { background: #f5f5f5; color: #1a1a1a; border-color: #a3a3a3; }
+.jumper-wire--white { background: #ffffff; color: #525252; border-color: #d4d4d4; }
+
+/* Through-hole grid — smaller, lighter for overlays */
+.through-holes {
+  position: absolute;
   inset: 0;
-  opacity: 0.015;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-image:
+    radial-gradient(circle, rgba(160, 155, 140, 0.25) 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  background-position: 7px 7px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Tag / pill styles for dark theme */
-.tech-tag {
+/* Schematic graph paper background */
+.schematic-grid {
+  background-image:
+    linear-gradient(rgba(45, 106, 79, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 106, 79, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Row label (A-E, F-J like a real breadboard) */
+.row-label {
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.03em;
-  padding: 4px 12px;
-  border-radius: 6px;
-  display: inline-block;
-  font-weight: 500;
-  background: rgba(96, 165, 250, 0.08);
-  color: var(--color-accent);
-  border: 1px solid rgba(96, 165, 250, 0.15);
-  transition: background 0.2s, border-color 0.2s;
+  font-size: 9px;
+  color: #a09a8e;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.tech-tag:hover {
-  background: rgba(96, 165, 250, 0.14);
-  border-color: rgba(96, 165, 250, 0.3);
-}
-
-/* Status indicator */
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.7; box-shadow: 0 0 4px currentColor; }
-  50% { opacity: 1; box-shadow: 0 0 12px currentColor; }
-}
-
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Ambient gradient orb */
-.ambient-orb {
+/* Wire decoration — a coloured wire between two points */
+.wire-deco {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  opacity: 0.4;
+  height: 3px;
+  border-radius: 3px;
+  z-index: 1;
+  opacity: 0.5;
 }
 
-/* Horizontal rule with glow */
-.glow-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  opacity: 0.2;
-}
+.wire-deco--red { background: #ef4444; }
+.wire-deco--blue { background: #3b82f6; }
+.wire-deco--green { background: #22c55e; }
+.wire-deco--yellow { background: #eab308; }
+.wire-deco--orange { background: #f97316; }

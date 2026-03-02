@@ -21,8 +21,7 @@ export default function Navbar() {
     { label: "About", href: "#about" },
     { label: "Experience", href: "#experience" },
     { label: "Projects", href: "#projects" },
-    { label: "Systems", href: "#skills" },
-    { label: "Trajectory", href: "#trajectory" },
+    { label: "Skills", href: "#skills" },
     { label: "Contact", href: "#contact" },
   ];
 
@@ -38,7 +37,7 @@ export default function Navbar() {
       transition={{ duration: 0.6, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border shadow-lg shadow-black/10"
+          ? "bg-white/80 backdrop-blur-md border-b border-border-light shadow-sm"
           : "bg-transparent"
       }`}
     >
@@ -132,7 +131,7 @@ export default function Navbar() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-background/95 backdrop-blur-md border-b border-border px-6 pb-4"
+          className="md:hidden bg-white/95 backdrop-blur-md border-b border-border px-6 pb-4"
         >
           {isHome &&
             sectionLinks.map((link) => (
