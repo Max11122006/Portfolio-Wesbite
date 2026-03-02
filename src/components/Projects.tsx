@@ -78,15 +78,6 @@ const projects: Project[] = [
   },
 ];
 
-function WireDeco({ top, left, width, color }: { top: string; left: string; width: string; color: string }) {
-  return (
-    <div
-      className={`wire-deco wire-deco--${color}`}
-      style={{ top, left, width }}
-    />
-  );
-}
-
 export default function Projects() {
   return (
     <section
@@ -132,11 +123,7 @@ export default function Projects() {
                   <div className="power-rail-red" />
                 </div>
 
-                {/* Decorative wires */}
-                <WireDeco top="35%" left="0" width="18%" color={project.wireColor} />
-                <WireDeco top="65%" left="82%" width="18%" color={project.wireColor} />
-
-                <div className="card-inner p-7 md:p-8 pt-9 pb-9 flex flex-col h-full">
+                <div className="card-inner p-7 md:p-8 flex flex-col h-full">
                   {/* Header row: pin label + category */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">

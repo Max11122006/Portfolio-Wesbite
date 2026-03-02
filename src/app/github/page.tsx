@@ -19,6 +19,7 @@ interface Repo {
   topics: string[];
   url: string;
   lastUpdated: string;
+  images?: string[];
 }
 
 const repos: Repo[] = [
@@ -91,6 +92,7 @@ const repos: Repo[] = [
     topics: ["nextjs", "aviation", "real-time"],
     url: "#",
     lastUpdated: "2025-11",
+    // images: ["/images/skytrack-1.jpg", "/images/skytrack-2.jpg"],
   },
   {
     id: 7,
@@ -129,6 +131,7 @@ const repos: Repo[] = [
     topics: ["nextjs", "portfolio", "threejs"],
     url: "#",
     lastUpdated: "2026-03",
+    // images: ["/images/portfolio-1.jpg"],
   },
   {
     id: 10,
@@ -151,6 +154,7 @@ const repos: Repo[] = [
     topics: ["arduino", "flight-sim", "hardware"],
     url: "#",
     lastUpdated: "2025-12",
+    // images: ["/images/flightsim-1.jpg", "/images/flightsim-2.jpg", "/images/flightsim-3.jpg"],
   },
   {
     id: 12,
@@ -172,14 +176,14 @@ const categories: { key: RepoCategory; label: string; icon: string; ledColor: st
 ];
 
 function RepoCard({ repo }: { repo: Repo }) {
+  const [activeImg, setActiveImg] = useState(0);
+  const hasImages = repo.images && repo.images.length > 0;
+
   return (
-    <motion.a
-      href={repo.url}
-      target="_blank"
-      rel="noopener noreferrer"
+    <motion.div
       whileHover={{ y: -3, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="breadboard-card block"
+      className="breadboard-card h-full flex flex-col"
     >
       {/* Power rails */}
       <div className="power-rails-top">
@@ -191,10 +195,51 @@ function RepoCard({ repo }: { repo: Repo }) {
         <div className="power-rail-red" />
       </div>
 
-      <div className="card-inner p-6 pt-8 pb-8">
+      {/* Image gallery */}
+      {hasImages && (
+        <div className="relative z-[3] mx-[6px] mt-[6px] rounded-t overflow-hidden">
+          <div className="relative aspect-[16/10] bg-surface-alt">
+            <img
+              src={repo.images![activeImg]}
+              alt={`${repo.name} screenshot ${activeImg + 1}`}
+              className="w-full h-full object-cover"
+            />
+            {/* Image counter badge */}
+            {repo.images!.length > 1 && (
+              <span className="absolute top-2 right-2 text-[9px] font-mono bg-black/60 text-white px-2 py-0.5 rounded-full">
+                {activeImg + 1}/{repo.images!.length}
+              </span>
+            )}
+          </div>
+          {/* Thumbnail dots */}
+          {repo.images!.length > 1 && (
+            <div className="flex items-center justify-center gap-1.5 py-2 bg-surface-alt/80">
+              {repo.images!.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImg(i)}
+                  className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                    i === activeImg
+                      ? "bg-accent scale-125"
+                      : "bg-border hover:bg-muted/40"
+                  }`}
+                  aria-label={`View image ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <a
+        href={repo.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="card-inner p-6 flex-1 flex flex-col"
+      >
         {/* Repo name */}
         <div className="flex items-center gap-2 mb-3">
-          <svg className="w-4 h-4 text-muted/40" viewBox="0 0 16 16" fill="currentColor">
+          <svg className="w-4 h-4 text-muted/40 shrink-0" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
           </svg>
           <h3 className="text-sm font-semibold text-foreground font-mono truncate">
@@ -202,7 +247,7 @@ function RepoCard({ repo }: { repo: Repo }) {
           </h3>
         </div>
 
-        <p className="text-xs text-muted leading-relaxed mb-4 line-clamp-2">
+        <p className="text-xs text-muted leading-relaxed mb-4 line-clamp-2 flex-1">
           {repo.description}
         </p>
 
@@ -239,8 +284,8 @@ function RepoCard({ repo }: { repo: Repo }) {
             })}
           </div>
         )}
-      </div>
-    </motion.a>
+      </a>
+    </motion.div>
   );
 }
 

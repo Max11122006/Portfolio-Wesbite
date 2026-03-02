@@ -81,7 +81,7 @@ export default function Skills() {
                   <div className="power-rail-blue" />
                   <div className="power-rail-red" />
                 </div>
-                <div className="card-inner p-6 pt-8 pb-8">
+                <div className="card-inner p-6">
                   <h3 className="text-xs tracking-[0.2em] uppercase text-accent font-medium font-mono mb-5">
                     {group.category}
                   </h3>
