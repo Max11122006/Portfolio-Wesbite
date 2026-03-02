@@ -139,7 +139,7 @@ export default function PersonalProjectsPage() {
                       {/* Header — always visible */}
                       <button
                         onClick={() => setExpanded(isExpanded ? null : project.id)}
-                        className="w-full text-left p-7 md:p-8 cursor-pointer"
+                        className="w-full text-left p-7 md:p-8 pt-9 cursor-pointer"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
