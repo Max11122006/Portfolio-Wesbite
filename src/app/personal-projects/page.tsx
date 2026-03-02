@@ -11,12 +11,11 @@ interface PersonalProject {
   title: string;
   subtitle: string;
   status: "active" | "completed" | "in-progress";
-  ledColor: string;
-  schematicLabel: string;
+  wireColor: string;
+  pinLabel: string;
   description: string;
   specs: { label: string; value: string }[];
   milestones: { title: string; done: boolean }[];
-  images?: string[];
 }
 
 const personalProjects: PersonalProject[] = [
@@ -25,8 +24,8 @@ const personalProjects: PersonalProject[] = [
     title: "Custom 3D Printer Build",
     subtitle: "FDM / CoreXY Platform",
     status: "in-progress",
-    ledColor: "#22c55e",
-    schematicLabel: "P1",
+    wireColor: "green",
+    pinLabel: "P1",
     description:
       "Building and tuning a custom 3D printer from the ground up. The project covers mechanical assembly, electronics wiring, firmware configuration, and calibration — applying first-principles engineering to additive manufacturing.",
     specs: [
@@ -52,8 +51,8 @@ const personalProjects: PersonalProject[] = [
     title: "Car Project",
     subtitle: "Performance & Maintenance",
     status: "active",
-    ledColor: "#ef4444",
-    schematicLabel: "P2",
+    wireColor: "red",
+    pinLabel: "P2",
     description:
       "Hands-on automotive work covering routine maintenance, diagnostics, and performance modifications. Understanding mechanical systems through direct interaction — applying engineering knowledge to real-world problem-solving.",
     specs: [
@@ -74,9 +73,15 @@ const personalProjects: PersonalProject[] = [
 ];
 
 const statusMap = {
-  active: { label: "ACTIVE", color: "#22c55e" },
-  completed: { label: "COMPLETE", color: "#3b82f6" },
-  "in-progress": { label: "IN PROGRESS", color: "#eab308" },
+  active: { label: "ACTIVE", bg: "#f0fdf4", color: "#15803d", border: "#86efac" },
+  completed: { label: "COMPLETE", bg: "#eff6ff", color: "#1d4ed8", border: "#93c5fd" },
+  "in-progress": { label: "IN PROGRESS", bg: "#fefce8", color: "#a16207", border: "#fde047" },
+};
+
+const STATUS_LED: Record<string, string> = {
+  active: "#22c55e",
+  completed: "#3b82f6",
+  "in-progress": "#eab308",
 };
 
 export default function PersonalProjectsPage() {
@@ -87,7 +92,6 @@ export default function PersonalProjectsPage() {
       <Navbar />
 
       <section className="pt-32 pb-24 md:pb-36 px-6">
-        {/* Schematic grid background */}
         <div className="fixed inset-0 schematic-grid pointer-events-none opacity-50" />
 
         <div className="relative max-w-5xl mx-auto">
@@ -111,6 +115,7 @@ export default function PersonalProjectsPage() {
             {personalProjects.map((project) => {
               const isExpanded = expanded === project.id;
               const status = statusMap[project.status];
+              const ledColor = STATUS_LED[project.status];
 
               return (
                 <StaggerItem key={project.id}>
@@ -120,35 +125,43 @@ export default function PersonalProjectsPage() {
                     whileHover={!isExpanded ? { y: -2 } : {}}
                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <div className="through-holes" />
+                    {/* Power rails */}
+                    <div className="power-rails-top">
+                      <div className="power-rail-red" />
+                      <div className="power-rail-blue" />
+                    </div>
+                    <div className="power-rails-bottom">
+                      <div className="power-rail-blue" />
+                      <div className="power-rail-red" />
+                    </div>
 
                     <div className="card-inner">
                       {/* Header — always visible */}
                       <button
                         onClick={() => setExpanded(isExpanded ? null : project.id)}
-                        className="w-full text-left p-7 md:p-8 cursor-pointer"
+                        className="w-full text-left p-7 md:p-8 pt-9 cursor-pointer"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
-                              <span className="text-[10px] font-mono text-copper-light/60 border border-copper/20 px-2 py-0.5 rounded-sm bg-black/20">
-                                {project.schematicLabel}
+                              <span className="row-label border border-border px-2 py-0.5 rounded-sm bg-white/60">
+                                {project.pinLabel}
                               </span>
                               <span
                                 className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded-sm"
                                 style={{
                                   color: status.color,
-                                  border: `1px solid ${status.color}33`,
-                                  backgroundColor: `${status.color}10`,
+                                  border: `1.5px solid ${status.border}`,
+                                  backgroundColor: status.bg,
                                 }}
                               >
                                 {status.label}
                               </span>
                             </div>
-                            <h2 className="text-xl md:text-2xl font-bold text-emerald-50 mb-1">
+                            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-1">
                               {project.title}
                             </h2>
-                            <p className="text-sm text-emerald-200/50 font-mono">
+                            <p className="text-sm text-muted font-mono">
                               {project.subtitle}
                             </p>
                           </div>
@@ -156,18 +169,18 @@ export default function PersonalProjectsPage() {
                           <div className="flex items-center gap-3">
                             <div
                               className="led-indicator"
-                              style={{ color: project.ledColor, backgroundColor: project.ledColor }}
+                              style={{ color: ledColor, backgroundColor: ledColor }}
                             />
                             <motion.span
                               animate={{ rotate: isExpanded ? 180 : 0 }}
-                              className="text-emerald-200/40 text-lg"
+                              className="text-muted/40 text-lg"
                             >
                               ▼
                             </motion.span>
                           </div>
                         </div>
 
-                        <p className="text-sm text-emerald-100/50 mt-4 max-w-2xl leading-relaxed">
+                        <p className="text-sm text-muted mt-4 max-w-2xl leading-relaxed">
                           {project.description}
                         </p>
                       </button>
@@ -182,23 +195,27 @@ export default function PersonalProjectsPage() {
                             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             className="overflow-hidden"
                           >
-                            <div className="px-7 md:px-8 pb-8 pt-2">
-                              {/* Copper divider */}
-                              <div className="h-px bg-gradient-to-r from-transparent via-copper/30 to-transparent mb-8" />
+                            <div className="px-7 md:px-8 pb-10 pt-2">
+                              {/* Divider styled like a wire */}
+                              <div className="flex items-center gap-3 mb-8">
+                                <div className={`flex-1 h-[3px] rounded-full bg-${project.wireColor}-400/30`} />
+                                <span className="row-label">DETAILS</span>
+                                <div className={`flex-1 h-[3px] rounded-full bg-${project.wireColor}-400/30`} />
+                              </div>
 
                               <div className="grid md:grid-cols-2 gap-8">
                                 {/* Specs */}
                                 <div>
-                                  <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-copper-light/60 mb-4">
+                                  <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-accent mb-4">
                                     SPECIFICATIONS
                                   </h3>
                                   <div className="space-y-3">
                                     {project.specs.map((spec) => (
                                       <div key={spec.label} className="flex items-baseline gap-3">
-                                        <span className="text-[10px] font-mono text-emerald-300/40 w-24 shrink-0 uppercase tracking-wider">
+                                        <span className="text-[10px] font-mono text-muted/60 w-24 shrink-0 uppercase tracking-wider">
                                           {spec.label}
                                         </span>
-                                        <span className="text-sm text-emerald-100/70">
+                                        <span className="text-sm text-foreground/80">
                                           {spec.value}
                                         </span>
                                       </div>
@@ -208,7 +225,7 @@ export default function PersonalProjectsPage() {
 
                                 {/* Milestones */}
                                 <div>
-                                  <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-copper-light/60 mb-4">
+                                  <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-accent mb-4">
                                     MILESTONES
                                   </h3>
                                   <div className="space-y-2.5">
@@ -217,15 +234,15 @@ export default function PersonalProjectsPage() {
                                         <div
                                           className={`w-2.5 h-2.5 rounded-full border-2 shrink-0 ${
                                             ms.done
-                                              ? "bg-emerald-400 border-emerald-400"
-                                              : "bg-transparent border-emerald-500/30"
+                                              ? "bg-green-500 border-green-500"
+                                              : "bg-transparent border-gray-300"
                                           }`}
                                         />
                                         <span
                                           className={`text-sm ${
                                             ms.done
-                                              ? "text-emerald-100/70"
-                                              : "text-emerald-100/30"
+                                              ? "text-foreground/80"
+                                              : "text-muted/50"
                                           }`}
                                         >
                                           {ms.title}
@@ -236,17 +253,17 @@ export default function PersonalProjectsPage() {
 
                                   {/* Progress bar */}
                                   <div className="mt-5">
-                                    <div className="flex justify-between text-[10px] font-mono text-emerald-300/40 mb-1.5">
+                                    <div className="flex justify-between text-[10px] font-mono text-muted/60 mb-1.5">
                                       <span>PROGRESS</span>
                                       <span>
                                         {project.milestones.filter((m) => m.done).length}/
                                         {project.milestones.length}
                                       </span>
                                     </div>
-                                    <div className="h-1.5 bg-black/30 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-surface-alt rounded-full overflow-hidden border border-border-light">
                                       <motion.div
                                         className="h-full rounded-full"
-                                        style={{ backgroundColor: project.ledColor }}
+                                        style={{ backgroundColor: ledColor }}
                                         initial={{ width: 0 }}
                                         animate={{
                                           width: `${

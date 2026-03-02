@@ -80,43 +80,47 @@ body {
   opacity: 0.4;
 }
 
-/* ===== BREADBOARD / PCB CARD STYLES ===== */
+/* ===== SOLDERLESS BREADBOARD CARD STYLES ===== */
 
 .breadboard-card {
   position: relative;
-  background: #1b4a1b;
-  border: 2px solid #0d2e0d;
-  border-radius: 8px;
+  background: #f5f2eb;
+  border: 2px solid #d0cdc5;
+  border-radius: 6px;
   overflow: hidden;
-  color: #e0e0d0;
+  color: var(--color-foreground);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
+/* Hole grid pattern — the classic breadboard dots */
 .breadboard-card::before {
   content: "";
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle, rgba(184, 115, 51, 0.12) 1px, transparent 1px);
-  background-size: 16px 16px;
+    radial-gradient(circle, #c8c4ba 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  background-position: 7px 7px;
   pointer-events: none;
   z-index: 0;
+  opacity: 0.45;
 }
 
+/* Center channel gap (the DIP IC trough) */
 .breadboard-card::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--color-copper) 0px,
-    var(--color-copper) 6px,
-    transparent 6px,
-    transparent 10px
-  );
-  z-index: 1;
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  background: #ddd8ce;
+  transform: translateY(-50%);
+  border-radius: 2px;
+  z-index: 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .breadboard-card .card-inner {
@@ -124,12 +128,35 @@ body {
   z-index: 2;
 }
 
-/* Copper trace lines */
-.copper-trace {
+/* Power rails — red and blue stripes on top and bottom */
+.power-rails-top,
+.power-rails-bottom {
   position: absolute;
-  background: linear-gradient(90deg, var(--color-copper), var(--color-copper-light));
-  opacity: 0.15;
-  z-index: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  z-index: 1;
+  display: flex;
+}
+
+.power-rails-top {
+  top: 0;
+}
+
+.power-rails-bottom {
+  bottom: 0;
+}
+
+.power-rail-red {
+  flex: 1;
+  background: #dc2626;
+  opacity: 0.7;
+}
+
+.power-rail-blue {
+  flex: 1;
+  background: #2563eb;
+  opacity: 0.7;
 }
 
 /* LED indicator dot */
@@ -146,55 +173,72 @@ body {
   50% { opacity: 1; }
 }
 
-/* IC chip style tag */
-.ic-chip {
-  background: #1a1a1a;
-  color: #c0c0c0;
-  border: 1px solid #333;
+/* Component tag — like a chip sitting on the breadboard */
+.component-tag {
+  background: #2a2a2a;
+  color: #d4d4d4;
+  border: 1px solid #444;
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.05em;
   padding: 3px 10px;
   border-radius: 2px;
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.ic-chip::before {
+/* Tiny "pin" dots on chip sides */
+.component-tag::before,
+.component-tag::after {
   content: "";
   position: absolute;
   top: 50%;
-  left: -4px;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 4px;
-  background: var(--color-solder);
+  width: 3px;
+  height: 3px;
+  background: #888;
   border-radius: 50%;
+  transform: translateY(-50%);
 }
 
-.ic-chip::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: -4px;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 4px;
-  background: var(--color-solder);
-  border-radius: 50%;
+.component-tag::before { left: -5px; }
+.component-tag::after { right: -5px; }
+
+/* Jumper wire tag — coloured wire on the board */
+.jumper-wire {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  display: inline-block;
+  font-weight: 500;
+  border: 1.5px solid;
 }
 
-/* Through-hole pad grid */
+.jumper-wire--red { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
+.jumper-wire--blue { background: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
+.jumper-wire--green { background: #f0fdf4; color: #15803d; border-color: #86efac; }
+.jumper-wire--yellow { background: #fefce8; color: #a16207; border-color: #fde047; }
+.jumper-wire--orange { background: #fff7ed; color: #c2410c; border-color: #fdba74; }
+.jumper-wire--purple { background: #faf5ff; color: #7e22ce; border-color: #c4b5fd; }
+.jumper-wire--black { background: #f5f5f5; color: #1a1a1a; border-color: #a3a3a3; }
+.jumper-wire--white { background: #ffffff; color: #525252; border-color: #d4d4d4; }
+
+/* Through-hole grid — smaller, lighter for overlays */
 .through-holes {
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle, rgba(192, 192, 192, 0.08) 2px, transparent 2px);
-  background-size: 20px 20px;
-  background-position: 10px 10px;
+    radial-gradient(circle, rgba(160, 155, 140, 0.25) 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+  background-position: 7px 7px;
   pointer-events: none;
+  z-index: 0;
 }
 
-/* Schematic-style grid background */
+/* Schematic graph paper background */
 .schematic-grid {
   background-image:
     linear-gradient(rgba(45, 106, 79, 0.06) 1px, transparent 1px),
@@ -202,32 +246,26 @@ body {
   background-size: 24px 24px;
 }
 
-/* Wire connector style */
-.wire-connector {
-  position: relative;
-  padding-left: 24px;
+/* Row label (A-E, F-J like a real breadboard) */
+.row-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: #a09a8e;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.wire-connector::before {
-  content: "";
+/* Wire decoration — a coloured wire between two points */
+.wire-deco {
   position: absolute;
-  left: 0;
-  top: 50%;
-  width: 16px;
-  height: 2px;
-  background: var(--color-copper);
-  transform: translateY(-50%);
+  height: 3px;
+  border-radius: 3px;
+  z-index: 1;
+  opacity: 0.5;
 }
 
-.wire-connector::after {
-  content: "";
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  border: 2px solid var(--color-copper);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--color-background);
-}
+.wire-deco--red { background: #ef4444; }
+.wire-deco--blue { background: #3b82f6; }
+.wire-deco--green { background: #22c55e; }
+.wire-deco--yellow { background: #eab308; }
+.wire-deco--orange { background: #f97316; }

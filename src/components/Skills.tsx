@@ -2,6 +2,8 @@
 
 import { FadeIn, StaggerContainer, StaggerItem } from "./MotionPrimitives";
 
+const WIRE_COLORS = ["red", "blue", "green", "yellow"];
+
 const skills = [
   {
     category: "Engineering",
@@ -68,21 +70,35 @@ export default function Skills() {
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
           staggerDelay={0.12}
         >
-          {skills.map((group) => (
+          {skills.map((group, gi) => (
             <StaggerItem key={group.category}>
               <div className="breadboard-card h-full">
-                <div className="through-holes" />
-                <div className="card-inner p-6">
-                  <h3 className="text-xs tracking-[0.2em] uppercase text-emerald-300/60 font-medium font-mono mb-5">
+                <div className="power-rails-top">
+                  <div className="power-rail-red" />
+                  <div className="power-rail-blue" />
+                </div>
+                <div className="power-rails-bottom">
+                  <div className="power-rail-blue" />
+                  <div className="power-rail-red" />
+                </div>
+                <div className="card-inner p-6 pt-8 pb-8">
+                  <h3 className="text-xs tracking-[0.2em] uppercase text-accent font-medium font-mono mb-5">
                     {group.category}
                   </h3>
                   <ul className="space-y-3">
-                    {group.items.map((item) => (
+                    {group.items.map((item, i) => (
                       <li
                         key={item}
-                        className="flex items-start gap-2.5 text-sm text-emerald-100/60 leading-relaxed"
+                        className="flex items-start gap-2.5 text-sm text-muted leading-relaxed"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-copper shrink-0 mt-1.5" />
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0 mt-1.5"
+                          style={{
+                            backgroundColor: `var(--color-led-${
+                              ["red", "green", "blue", "yellow"][i % 4]
+                            })`,
+                          }}
+                        />
                         {item}
                       </li>
                     ))}

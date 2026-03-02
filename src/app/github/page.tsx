@@ -177,28 +177,37 @@ function RepoCard({ repo }: { repo: Repo }) {
       href={repo.url}
       target="_blank"
       rel="noopener noreferrer"
-      whileHover={{ y: -3, boxShadow: "0 0 20px rgba(27, 94, 32, 0.15)" }}
+      whileHover={{ y: -3, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="breadboard-card block"
     >
-      <div className="through-holes" />
-      <div className="card-inner p-6">
+      {/* Power rails */}
+      <div className="power-rails-top">
+        <div className="power-rail-red" />
+        <div className="power-rail-blue" />
+      </div>
+      <div className="power-rails-bottom">
+        <div className="power-rail-blue" />
+        <div className="power-rail-red" />
+      </div>
+
+      <div className="card-inner p-6 pt-8 pb-8">
         {/* Repo name */}
         <div className="flex items-center gap-2 mb-3">
-          <svg className="w-4 h-4 text-emerald-300/40" viewBox="0 0 16 16" fill="currentColor">
+          <svg className="w-4 h-4 text-muted/40" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
           </svg>
-          <h3 className="text-sm font-semibold text-emerald-50 font-mono truncate">
+          <h3 className="text-sm font-semibold text-foreground font-mono truncate">
             {repo.name}
           </h3>
         </div>
 
-        <p className="text-xs text-emerald-100/50 leading-relaxed mb-4 line-clamp-2">
+        <p className="text-xs text-muted leading-relaxed mb-4 line-clamp-2">
           {repo.description}
         </p>
 
         {/* Bottom row: language + stars + date */}
-        <div className="flex items-center gap-4 text-[10px] font-mono text-emerald-200/40">
+        <div className="flex items-center gap-4 text-[10px] font-mono text-muted/60">
           <span className="flex items-center gap-1.5">
             <span
               className="w-2.5 h-2.5 rounded-full"
@@ -214,17 +223,20 @@ function RepoCard({ repo }: { repo: Repo }) {
           <span className="ml-auto">{repo.lastUpdated}</span>
         </div>
 
-        {/* Topics */}
+        {/* Topics as jumper wires */}
         {repo.topics.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-3">
-            {repo.topics.map((topic) => (
-              <span
-                key={topic}
-                className="px-2 py-0.5 text-[9px] font-mono rounded-sm bg-black/30 text-emerald-200/40 border border-emerald-500/10"
-              >
-                {topic}
-              </span>
-            ))}
+            {repo.topics.map((topic, i) => {
+              const colors = ["red", "blue", "green", "yellow", "orange", "purple"];
+              return (
+                <span
+                  key={topic}
+                  className={`jumper-wire jumper-wire--${colors[i % colors.length]}`}
+                >
+                  {topic}
+                </span>
+              );
+            })}
           </div>
         )}
       </div>
@@ -276,7 +288,7 @@ export default function GitHubPage() {
                       relative flex items-center gap-2.5 px-5 py-3 rounded-lg font-mono text-sm transition-all duration-300 cursor-pointer
                       ${
                         isActive
-                          ? "bg-[#1b4a1b] border-2 border-emerald-500/30 text-emerald-50 shadow-lg"
+                          ? "bg-[#f5f2eb] border-2 border-border text-foreground shadow-md"
                           : "bg-surface border-2 border-border text-muted hover:border-accent/30 hover:text-foreground"
                       }
                     `}
@@ -286,7 +298,7 @@ export default function GitHubPage() {
                     <span
                       className={`
                         text-[10px] px-1.5 py-0.5 rounded-sm font-mono
-                        ${isActive ? "bg-emerald-500/20 text-emerald-300" : "bg-surface-alt text-muted/60"}
+                        ${isActive ? "bg-accent/10 text-accent" : "bg-surface-alt text-muted/60"}
                       `}
                     >
                       {count}
