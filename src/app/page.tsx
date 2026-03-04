@@ -10,9 +10,7 @@ import Footer from "@/components/Footer";
 const Experience = lazy(() => import("@/components/Experience"));
 const Projects = lazy(() => import("@/components/Projects"));
 const Interactive3D = lazy(() => import("@/components/Interactive3D"));
-const SystemsMap = lazy(() => import("@/components/SystemsMap"));
-const Trajectory = lazy(() => import("@/components/Trajectory"));
-const Philosophy = lazy(() => import("@/components/Philosophy"));
+const Skills = lazy(() => import("@/components/Skills"));
 const Contact = lazy(() => import("@/components/Contact"));
 
 function SectionFallback() {
@@ -35,13 +33,7 @@ export default function Home() {
         <Interactive3D />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
-        <SystemsMap />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <Trajectory />
-      </Suspense>
-      <Suspense fallback={<SectionFallback />}>
-        <Philosophy />
+        <Skills />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <Contact />
