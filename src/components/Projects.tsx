@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { FadeIn, StaggerContainer, StaggerItem } from "./MotionPrimitives";
+import BreadboardCard from "./BreadboardCard";
 
 interface Project {
   id: number;
@@ -78,15 +78,6 @@ const projects: Project[] = [
   },
 ];
 
-function WireDeco({ top, left, width, color }: { top: string; left: string; width: string; color: string }) {
-  return (
-    <div
-      className={`wire-deco wire-deco--${color}`}
-      style={{ top, left, width }}
-    />
-  );
-}
-
 export default function Projects() {
   return (
     <section
@@ -117,26 +108,8 @@ export default function Projects() {
         >
           {projects.map((project) => (
             <StaggerItem key={project.id}>
-              <motion.div
-                whileHover={{ y: -4, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                className="breadboard-card h-full"
-              >
-                {/* Power rails */}
-                <div className="power-rails-top">
-                  <div className="power-rail-red" />
-                  <div className="power-rail-blue" />
-                </div>
-                <div className="power-rails-bottom">
-                  <div className="power-rail-blue" />
-                  <div className="power-rail-red" />
-                </div>
-
-                {/* Decorative wires */}
-                <WireDeco top="35%" left="0" width="18%" color={project.wireColor} />
-                <WireDeco top="65%" left="82%" width="18%" color={project.wireColor} />
-
-                <div className="card-inner p-7 md:p-8 pt-9 pb-9 flex flex-col h-full">
+              <BreadboardCard className="h-full" hover>
+                <div className="p-7 md:p-8 pt-7 pb-7 flex flex-col h-full">
                   {/* Header row: pin label + category */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -160,7 +133,7 @@ export default function Projects() {
                     {project.title}
                   </h3>
 
-                  <p className="text-sm text-muted leading-relaxed flex-1 mb-5">
+                  <p className="text-sm text-muted leading-relaxed mb-4">
                     {project.description}
                   </p>
 
@@ -176,7 +149,7 @@ export default function Projects() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </BreadboardCard>
             </StaggerItem>
           ))}
         </StaggerContainer>

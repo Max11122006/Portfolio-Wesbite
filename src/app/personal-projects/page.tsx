@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/MotionPrimitives";
+import BreadboardCard from "@/components/BreadboardCard";
 
 interface PersonalProject {
   id: string;
@@ -119,171 +120,154 @@ export default function PersonalProjectsPage() {
 
               return (
                 <StaggerItem key={project.id}>
-                  <motion.div
-                    layout
-                    className="breadboard-card"
-                    whileHover={!isExpanded ? { y: -2 } : {}}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {/* Power rails */}
-                    <div className="power-rails-top">
-                      <div className="power-rail-red" />
-                      <div className="power-rail-blue" />
-                    </div>
-                    <div className="power-rails-bottom">
-                      <div className="power-rail-blue" />
-                      <div className="power-rail-red" />
-                    </div>
-
-                    <div className="card-inner">
-                      {/* Header — always visible */}
-                      <button
-                        onClick={() => setExpanded(isExpanded ? null : project.id)}
-                        className="w-full text-left p-7 md:p-8 pt-9 cursor-pointer"
-                      >
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-3">
-                              <span className="row-label border border-border px-2 py-0.5 rounded-sm bg-white/60">
-                                {project.pinLabel}
-                              </span>
-                              <span
-                                className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded-sm"
-                                style={{
-                                  color: status.color,
-                                  border: `1.5px solid ${status.border}`,
-                                  backgroundColor: status.bg,
-                                }}
-                              >
-                                {status.label}
-                              </span>
-                            </div>
-                            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-1">
-                              {project.title}
-                            </h2>
-                            <p className="text-sm text-muted font-mono">
-                              {project.subtitle}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            <div
-                              className="led-indicator"
-                              style={{ color: ledColor, backgroundColor: ledColor }}
-                            />
-                            <motion.span
-                              animate={{ rotate: isExpanded ? 180 : 0 }}
-                              className="text-muted/40 text-lg"
+                  <BreadboardCard hover={!isExpanded}>
+                    {/* Header — always visible */}
+                    <button
+                      onClick={() => setExpanded(isExpanded ? null : project.id)}
+                      className="w-full text-left p-7 md:p-8 pt-9 cursor-pointer"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-3">
+                            <span className="row-label border border-border px-2 py-0.5 rounded-sm bg-white/60">
+                              {project.pinLabel}
+                            </span>
+                            <span
+                              className="text-[10px] font-mono tracking-wider px-2 py-0.5 rounded-sm"
+                              style={{
+                                color: status.color,
+                                border: `1.5px solid ${status.border}`,
+                                backgroundColor: status.bg,
+                              }}
                             >
-                              ▼
-                            </motion.span>
+                              {status.label}
+                            </span>
                           </div>
+                          <h2 className="text-xl md:text-2xl font-bold text-foreground mb-1">
+                            {project.title}
+                          </h2>
+                          <p className="text-sm text-muted font-mono">
+                            {project.subtitle}
+                          </p>
                         </div>
 
-                        <p className="text-sm text-muted mt-4 max-w-2xl leading-relaxed">
-                          {project.description}
-                        </p>
-                      </button>
-
-                      {/* Expanded content */}
-                      <AnimatePresence>
-                        {isExpanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                            className="overflow-hidden"
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="led-indicator"
+                            style={{ color: ledColor, backgroundColor: ledColor }}
+                          />
+                          <motion.span
+                            animate={{ rotate: isExpanded ? 180 : 0 }}
+                            className="text-muted/40 text-lg"
                           >
-                            <div className="px-7 md:px-8 pb-10 pt-2">
-                              {/* Divider styled like a wire */}
-                              <div className="flex items-center gap-3 mb-8">
-                                <div className={`flex-1 h-[3px] rounded-full bg-${project.wireColor}-400/30`} />
-                                <span className="row-label">DETAILS</span>
-                                <div className={`flex-1 h-[3px] rounded-full bg-${project.wireColor}-400/30`} />
-                              </div>
+                            ▼
+                          </motion.span>
+                        </div>
+                      </div>
 
-                              <div className="grid md:grid-cols-2 gap-8">
-                                {/* Specs */}
-                                <div>
-                                  <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-accent mb-4">
-                                    SPECIFICATIONS
-                                  </h3>
-                                  <div className="space-y-3">
-                                    {project.specs.map((spec) => (
-                                      <div key={spec.label} className="flex items-baseline gap-3">
-                                        <span className="text-[10px] font-mono text-muted/60 w-24 shrink-0 uppercase tracking-wider">
-                                          {spec.label}
-                                        </span>
-                                        <span className="text-sm text-foreground/80">
-                                          {spec.value}
-                                        </span>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                      <p className="text-sm text-muted mt-4 max-w-2xl leading-relaxed">
+                        {project.description}
+                      </p>
+                    </button>
 
-                                {/* Milestones */}
-                                <div>
-                                  <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-accent mb-4">
-                                    MILESTONES
-                                  </h3>
-                                  <div className="space-y-2.5">
-                                    {project.milestones.map((ms, i) => (
-                                      <div key={i} className="flex items-center gap-3">
-                                        <div
-                                          className={`w-2.5 h-2.5 rounded-full border-2 shrink-0 ${
-                                            ms.done
-                                              ? "bg-green-500 border-green-500"
-                                              : "bg-transparent border-gray-300"
-                                          }`}
-                                        />
-                                        <span
-                                          className={`text-sm ${
-                                            ms.done
-                                              ? "text-foreground/80"
-                                              : "text-muted/50"
-                                          }`}
-                                        >
-                                          {ms.title}
-                                        </span>
-                                      </div>
-                                    ))}
-                                  </div>
+                    {/* Expanded content */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-7 md:px-8 pb-10 pt-2">
+                            {/* Divider styled like a wire */}
+                            <div className="flex items-center gap-3 mb-8">
+                              <div className={`flex-1 h-[3px] rounded-full bg-${project.wireColor}-400/30`} />
+                              <span className="row-label">DETAILS</span>
+                              <div className={`flex-1 h-[3px] rounded-full bg-${project.wireColor}-400/30`} />
+                            </div>
 
-                                  {/* Progress bar */}
-                                  <div className="mt-5">
-                                    <div className="flex justify-between text-[10px] font-mono text-muted/60 mb-1.5">
-                                      <span>PROGRESS</span>
-                                      <span>
-                                        {project.milestones.filter((m) => m.done).length}/
-                                        {project.milestones.length}
+                            <div className="grid md:grid-cols-2 gap-8">
+                              {/* Specs */}
+                              <div>
+                                <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-accent mb-4">
+                                  SPECIFICATIONS
+                                </h3>
+                                <div className="space-y-3">
+                                  {project.specs.map((spec) => (
+                                    <div key={spec.label} className="flex items-baseline gap-3">
+                                      <span className="text-[10px] font-mono text-muted/60 w-24 shrink-0 uppercase tracking-wider">
+                                        {spec.label}
+                                      </span>
+                                      <span className="text-sm text-foreground/80">
+                                        {spec.value}
                                       </span>
                                     </div>
-                                    <div className="h-2 bg-surface-alt rounded-full overflow-hidden border border-border-light">
-                                      <motion.div
-                                        className="h-full rounded-full"
-                                        style={{ backgroundColor: ledColor }}
-                                        initial={{ width: 0 }}
-                                        animate={{
-                                          width: `${
-                                            (project.milestones.filter((m) => m.done).length /
-                                              project.milestones.length) *
-                                            100
-                                          }%`,
-                                        }}
-                                        transition={{ duration: 0.8, delay: 0.2 }}
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Milestones */}
+                              <div>
+                                <h3 className="text-xs font-mono tracking-[0.2em] uppercase text-accent mb-4">
+                                  MILESTONES
+                                </h3>
+                                <div className="space-y-2.5">
+                                  {project.milestones.map((ms, i) => (
+                                    <div key={i} className="flex items-center gap-3">
+                                      <div
+                                        className={`w-2.5 h-2.5 rounded-full border-2 shrink-0 ${
+                                          ms.done
+                                            ? "bg-green-500 border-green-500"
+                                            : "bg-transparent border-gray-300"
+                                        }`}
                                       />
+                                      <span
+                                        className={`text-sm ${
+                                          ms.done
+                                            ? "text-foreground/80"
+                                            : "text-muted/50"
+                                        }`}
+                                      >
+                                        {ms.title}
+                                      </span>
                                     </div>
+                                  ))}
+                                </div>
+
+                                {/* Progress bar */}
+                                <div className="mt-5">
+                                  <div className="flex justify-between text-[10px] font-mono text-muted/60 mb-1.5">
+                                    <span>PROGRESS</span>
+                                    <span>
+                                      {project.milestones.filter((m) => m.done).length}/
+                                      {project.milestones.length}
+                                    </span>
+                                  </div>
+                                  <div className="h-2 bg-surface-alt rounded-full overflow-hidden border border-border-light">
+                                    <motion.div
+                                      className="h-full rounded-full"
+                                      style={{ backgroundColor: ledColor }}
+                                      initial={{ width: 0 }}
+                                      animate={{
+                                        width: `${
+                                          (project.milestones.filter((m) => m.done).length /
+                                            project.milestones.length) *
+                                          100
+                                        }%`,
+                                      }}
+                                      transition={{ duration: 0.8, delay: 0.2 }}
+                                    />
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </motion.div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </BreadboardCard>
                 </StaggerItem>
               );
             })}

@@ -2,12 +2,12 @@
 
 @theme inline {
   --color-background: #f5f5f0;
-  --color-foreground: #1a1a1a;
-  --color-accent: #2d6a4f;
-  --color-accent-light: #40916c;
+  --color-foreground: #1A1410;
+  --color-accent: #B87333;
+  --color-accent-light: #D4956A;
   --color-surface: #ffffff;
   --color-surface-alt: #eaeae5;
-  --color-muted: #6b7280;
+  --color-muted: #8C7D6A;
   --color-border: #d4d4cc;
   --color-border-light: #e8e8e0;
   --color-pcb-green: #1b5e20;
@@ -55,8 +55,8 @@ body {
 }
 
 ::selection {
-  background: rgba(45, 106, 79, 0.2);
-  color: #1a1a1a;
+  background: rgba(184, 115, 51, 0.2);
+  color: #1A1410;
 }
 
 /* Section divider */
@@ -84,7 +84,7 @@ body {
 
 .breadboard-card {
   position: relative;
-  background: #f5f2eb;
+  background-color: #F8F8F6;
   border: 2px solid #d0cdc5;
   border-radius: 6px;
   overflow: hidden;
@@ -94,70 +94,58 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-/* Hole grid pattern — the classic breadboard dots */
-.breadboard-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle, #c8c4ba 1.5px, transparent 1.5px);
-  background-size: 14px 14px;
-  background-position: 7px 7px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.45;
-}
-
-/* Center channel gap (the DIP IC trough) */
-.breadboard-card::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  right: 12px;
-  height: 4px;
-  background: #ddd8ce;
-  transform: translateY(-50%);
-  border-radius: 2px;
-  z-index: 0;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
 
 .breadboard-card .card-inner {
   position: relative;
   z-index: 2;
 }
 
-/* Power rails — red and blue stripes on top and bottom */
-.power-rails-top,
-.power-rails-bottom {
+/* Power rails — thin engineering-notation style with +/− labels */
+.power-rail-strip {
   position: absolute;
   left: 0;
   right: 0;
-  height: 6px;
+  height: 20px;
   z-index: 1;
+  padding: 0 12px 0 22px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
 }
 
-.power-rails-top {
-  top: 0;
+.power-rail-strip--top { top: 0; }
+.power-rail-strip--bottom { bottom: 0; }
+
+.power-rail-line {
+  height: 1px;
+  opacity: 0.35;
+  position: relative;
 }
 
-.power-rails-bottom {
-  bottom: 0;
+.power-rail-line--red {
+  background: repeating-linear-gradient(to right, #C0756B 0, #C0756B 4px, transparent 4px, transparent 8px);
 }
 
-.power-rail-red {
-  flex: 1;
-  background: #dc2626;
+.power-rail-line--blue {
+  background: repeating-linear-gradient(to right, #6B8CC0 0, #6B8CC0 4px, transparent 4px, transparent 8px);
+}
+
+.power-rail-line::before {
+  content: attr(data-label);
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 700;
   opacity: 0.7;
+  line-height: 1;
 }
 
-.power-rail-blue {
-  flex: 1;
-  background: #2563eb;
-  opacity: 0.7;
-}
+.power-rail-line--red::before { color: #C0756B; }
+.power-rail-line--blue::before { color: #6B8CC0; }
 
 /* LED indicator dot */
 .led-indicator {
@@ -241,8 +229,8 @@ body {
 /* Schematic graph paper background */
 .schematic-grid {
   background-image:
-    linear-gradient(rgba(45, 106, 79, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(45, 106, 79, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(184, 115, 51, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184, 115, 51, 0.06) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 

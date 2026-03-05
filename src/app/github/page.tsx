@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/MotionPrimitives";
+import BreadboardCard from "@/components/BreadboardCard";
 
 type RepoCategory = "university" | "hackathon" | "personal";
 
@@ -173,74 +173,59 @@ const categories: { key: RepoCategory; label: string; icon: string; ledColor: st
 
 function RepoCard({ repo }: { repo: Repo }) {
   return (
-    <motion.a
-      href={repo.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      whileHover={{ y: -3, boxShadow: "0 4px 20px rgba(0,0,0,0.08)" }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="breadboard-card block"
-    >
-      {/* Power rails */}
-      <div className="power-rails-top">
-        <div className="power-rail-red" />
-        <div className="power-rail-blue" />
-      </div>
-      <div className="power-rails-bottom">
-        <div className="power-rail-blue" />
-        <div className="power-rail-red" />
-      </div>
-
-      <div className="card-inner p-6 pt-8 pb-8">
-        {/* Repo name */}
-        <div className="flex items-center gap-2 mb-3">
-          <svg className="w-4 h-4 text-muted/40" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
-          </svg>
-          <h3 className="text-sm font-semibold text-foreground font-mono truncate">
-            {repo.name}
-          </h3>
-        </div>
-
-        <p className="text-xs text-muted leading-relaxed mb-4 line-clamp-2">
-          {repo.description}
-        </p>
-
-        {/* Bottom row: language + stars + date */}
-        <div className="flex items-center gap-4 text-[10px] font-mono text-muted/60">
-          <span className="flex items-center gap-1.5">
-            <span
-              className="w-2.5 h-2.5 rounded-full"
-              style={{ backgroundColor: repo.languageColor }}
-            />
-            {repo.language}
-          </span>
-          {repo.stars !== undefined && (
-            <span className="flex items-center gap-1">
-              ★ {repo.stars}
-            </span>
-          )}
-          <span className="ml-auto">{repo.lastUpdated}</span>
-        </div>
-
-        {/* Topics as jumper wires */}
-        {repo.topics.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {repo.topics.map((topic, i) => {
-              const colors = ["red", "blue", "green", "yellow", "orange", "purple"];
-              return (
-                <span
-                  key={topic}
-                  className={`jumper-wire jumper-wire--${colors[i % colors.length]}`}
-                >
-                  {topic}
-                </span>
-              );
-            })}
+    <a href={repo.url} target="_blank" rel="noopener noreferrer" className="block">
+      <BreadboardCard hover>
+        <div className="p-6 pt-8 pb-8">
+          {/* Repo name */}
+          <div className="flex items-center gap-2 mb-3">
+            <svg className="w-4 h-4 text-muted/40" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z" />
+            </svg>
+            <h3 className="text-sm font-semibold text-foreground font-mono truncate">
+              {repo.name}
+            </h3>
           </div>
-        )}
-      </div>
-    </motion.a>
+
+          <p className="text-xs text-muted leading-relaxed mb-4 line-clamp-2">
+            {repo.description}
+          </p>
+
+          {/* Bottom row: language + stars + date */}
+          <div className="flex items-center gap-4 text-[10px] font-mono text-muted/60">
+            <span className="flex items-center gap-1.5">
+              <span
+                className="w-2.5 h-2.5 rounded-full"
+                style={{ backgroundColor: repo.languageColor }}
+              />
+              {repo.language}
+            </span>
+            {repo.stars !== undefined && (
+              <span className="flex items-center gap-1">
+                ★ {repo.stars}
+              </span>
+            )}
+            <span className="ml-auto">{repo.lastUpdated}</span>
+          </div>
+
+          {/* Topics as jumper wires */}
+          {repo.topics.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {repo.topics.map((topic, i) => {
+                const colors = ["red", "blue", "green", "yellow", "orange", "purple"];
+                return (
+                  <span
+                    key={topic}
+                    className={`jumper-wire jumper-wire--${colors[i % colors.length]}`}
+                  >
+                    {topic}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </BreadboardCard>
+    </a>
   );
 }
 
