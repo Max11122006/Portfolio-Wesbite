@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import SolariBoard from "./SolariBoard";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,50 +44,37 @@ export default function Hero() {
       {/* Content */}
       <motion.div
         style={{ y, opacity }}
-        className="relative z-10 text-center px-6 max-w-4xl mx-auto"
+        className="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center"
       >
-        {/* Overline */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
+        {/* Solari Board */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-xs md:text-sm tracking-[0.25em] uppercase text-muted mb-8 font-mono"
+        >
+          <SolariBoard
+            rows={[
+              { text: "MAKSYMILIAN DUBOWSKI", color: "white" },
+              { text: "BENG AEROSPACE ENGINEERING", color: "amber" },
+            ]}
+          />
+        </motion.div>
+
+        {/* Location tag */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 3.5, ease: [0.22, 1, 0.36, 1] }}
+          className="text-xs tracking-[0.25em] uppercase text-muted mt-10 mb-8 font-mono"
         >
           // Edinburgh, Scotland
         </motion.p>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] text-foreground mb-8"
-        >
-          Engineering Precision.
-          <br />
-          <span className="text-accent">Operating with Responsibility.</span>
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="space-y-1 mb-12"
-        >
-          <p className="text-base md:text-lg text-muted">
-            BEng (Hons) Aerospace Engineering — Heriot-Watt University
-          </p>
-          <p className="text-sm md:text-base text-muted/70">
-            Future Commercial Pilot
-          </p>
-        </motion.div>
-
-        {/* CTA */}
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, delay: 3.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex items-center justify-center gap-4"
         >
           <a
@@ -108,7 +96,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
+        transition={{ delay: 4.5, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <motion.div

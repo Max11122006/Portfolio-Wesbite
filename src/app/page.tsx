@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Footer from "@/components/Footer";
+import AirplaneDrift from "@/components/AirplaneDrift";
 
 // Lazy load heavier sections
 const Experience = lazy(() => import("@/components/Experience"));
@@ -20,6 +21,7 @@ function SectionFallback() {
 export default function Home() {
   return (
     <main className="bg-background min-h-screen">
+      <AirplaneDrift />
       <Navbar />
       <Hero />
       <About />
