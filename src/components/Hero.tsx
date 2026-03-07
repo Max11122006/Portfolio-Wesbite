@@ -1,8 +1,89 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import SolariBoard from "./SolariBoard";
+
+const PLANE_SVG = (
+  <>
+    <path d="M 10 28 C 10 25, 14 22, 20 22 L 105 22 C 115 22, 120 25, 120 28 C 120 31, 115 34, 105 34 L 20 34 C 14 34, 10 31, 10 28 Z" />
+    <path d="M 105 22 Q 118 22, 126 28 Q 118 34, 105 34" />
+    <path d="M 62 22 L 78 22 L 52 2 L 42 4 Z" />
+    <path d="M 62 34 L 78 34 L 52 54 L 42 52 Z" />
+    <path d="M 16 22 L 24 22 L 20 6 L 8 8 Z" />
+  </>
+);
+
+function DriftingPlane({ direction, duration, size, opacity, containerRef }: {
+  direction: "ltr" | "rtl";
+  duration: number;
+  size: number;
+  opacity: number;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const topRef = useRef(15 + Math.random() * 60);
+  const startTime = useRef(Date.now());
+  const wasOffScreen = useRef(false);
+
+  useEffect(() => {
+    let raf: number;
+    const durationMs = duration * 1000;
+
+    const animate = () => {
+      const el = ref.current;
+      const container = containerRef.current;
+      if (!el || !container) return;
+
+      const rect = container.getBoundingClientRect();
+      const elapsed = (Date.now() - startTime.current) % durationMs;
+      const progress = elapsed / durationMs;
+
+      // Travel from off-screen left to off-screen right relative to container
+      // rect.left is the container's offset from viewport left
+      const startX = -rect.left - size;
+      const endX = window.innerWidth - rect.left + size;
+      const totalTravel = endX - startX;
+
+      const x = direction === "ltr"
+        ? startX + progress * totalTravel
+        : endX - progress * totalTravel;
+
+      el.style.transform = `translate(${x}px, 0)${direction === "rtl" ? " scaleX(-1)" : ""}`;
+
+      // Only change height when plane is off-screen (at the reset point)
+      const isOffScreen = progress > 0.98 || progress < 0.02;
+      if (isOffScreen && !wasOffScreen.current) {
+        topRef.current = 15 + Math.random() * 60;
+        el.style.top = `${topRef.current}%`;
+      }
+      wasOffScreen.current = isOffScreen;
+
+      raf = requestAnimationFrame(animate);
+    };
+
+    raf = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(raf);
+  }, [direction, duration, size, containerRef]);
+
+  return (
+    <div
+      ref={ref}
+      className="absolute pointer-events-none hidden md:block z-[1]"
+      style={{ top: `${topRef.current}%` }}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 120 56"
+        fill="#C8C0B4"
+        opacity={opacity}
+      >
+        {PLANE_SVG}
+      </svg>
+    </div>
+  );
+}
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +120,12 @@ export default function Hero() {
           }}
           className="absolute inset-0"
         />
+      </div>
+
+      {/* Background aircraft — full viewport width, clipped to hero section */}
+      <div className="absolute inset-0 overflow-hidden">
+        <DriftingPlane direction="ltr" duration={18} size={48} opacity={0.40} containerRef={containerRef} />
+        <DriftingPlane direction="rtl" duration={22} size={36} opacity={0.32} containerRef={containerRef} />
       </div>
 
       {/* Content */}
