@@ -22,13 +22,21 @@ function DriftingPlane({ direction, duration, size, opacity, containerRef }: {
   containerRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const topRef = useRef(15 + Math.random() * 60);
-  const startTime = useRef(Date.now());
+  const topRef = useRef(50);
+  const startTime = useRef(0);
   const wasOffScreen = useRef(false);
+  const initialized = useRef(false);
 
   useEffect(() => {
     let raf: number;
     const durationMs = duration * 1000;
+
+    if (!initialized.current) {
+      initialized.current = true;
+      topRef.current = 15 + Math.random() * 60;
+      startTime.current = Date.now();
+      if (ref.current) ref.current.style.top = `${topRef.current}%`;
+    }
 
     const animate = () => {
       const el = ref.current;
@@ -70,7 +78,7 @@ function DriftingPlane({ direction, duration, size, opacity, containerRef }: {
     <div
       ref={ref}
       className="absolute pointer-events-none hidden md:block z-[1]"
-      style={{ top: `${topRef.current}%` }}
+      style={{ top: "50%" }}
     >
       <svg
         width={size}

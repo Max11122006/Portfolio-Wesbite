@@ -10,7 +10,6 @@ interface Project {
   description: string;
   tags: string[];
   wireColor: string;
-  pinLabel: string;
 }
 
 const WIRE_COLORS = ["red", "blue", "green", "yellow", "orange", "purple"];
@@ -18,63 +17,48 @@ const WIRE_COLORS = ["red", "blue", "green", "yellow", "orange", "purple"];
 const projects: Project[] = [
   {
     id: 1,
-    title: "Subsonic Wing Aerodynamic Analysis",
-    category: "Aerospace Engineering",
+    title: "Missile Trajectory Tracker",
+    category: "Software & Simulation",
     description:
-      "Computational analysis of subsonic airfoil performance characteristics including lift-to-drag ratio optimisation, pressure distribution mapping, and boundary layer evaluation under variable Reynolds number conditions.",
-    tags: ["MATLAB", "CFD", "Aerodynamics"],
+      "Physics-based simulation and visualisation tool for modelling projectile trajectories and flight paths. Built to experiment with motion equations, trajectory prediction, and interactive data visualisation of simulated launches.",
+    tags: ["Python", "Physics Simulation", "Data Visualisation", "Mathematics"],
     wireColor: WIRE_COLORS[0],
-    pinLabel: "A1",
   },
   {
     id: 2,
-    title: "Structural Load Path Simulation",
-    category: "Aerospace Engineering",
+    title: "Storm Formation Analysis Tool",
+    category: "Software & Data",
     description:
-      "Finite element analysis of a simplified fuselage section under combined loading scenarios. Evaluated stress concentrations, safety margins, and material efficiency for aluminium alloy configurations.",
-    tags: ["FEA", "SolidWorks", "Structures"],
+      "Experimental system analysing satellite imagery and weather data to identify patterns associated with storm development. Built using weather APIs and image analysis to explore how environmental data can indicate developing storms.",
+    tags: ["Python", "Weather APIs", "Data Analysis", "Computer Vision"],
     wireColor: WIRE_COLORS[1],
-    pinLabel: "A2",
   },
   {
     id: 3,
-    title: "Flight Data Telemetry Dashboard",
-    category: "Software Development",
+    title: "Beam Deflection Measurement Rig",
+    category: "Experimental Engineering",
     description:
-      "Real-time data visualisation tool for flight telemetry streams. Built with Python and a lightweight web front-end, processing altitude, velocity, and attitude data for post-flight analysis.",
-    tags: ["Python", "React", "Data Viz"],
+      "Experimental setup built to measure beam deflection under applied loads in order to estimate Young\u2019s modulus of a brass beam. A custom rig was constructed and instrumented with an Arduino-based measurement system to record displacement, allowing experimental results to be compared with theoretical beam bending equations.",
+    tags: ["Arduino", "Structural Mechanics", "Experimental Engineering", "Sensors", "Data Analysis"],
     wireColor: WIRE_COLORS[2],
-    pinLabel: "B1",
   },
   {
     id: 4,
-    title: "Orbital Mechanics Solver",
-    category: "Software Development",
+    title: "3D Printing & Mechanical Prototyping",
+    category: "Design & Fabrication",
     description:
-      "C++ application implementing Kepler orbit propagation, Hohmann transfer calculations, and delta-v budgeting for basic mission trajectory planning exercises.",
-    tags: ["C++", "Astrodynamics", "Algorithms"],
+      "Ongoing experimentation with 3D printing to prototype mechanical components and test design ideas. Used to create functional parts, explore design constraints, and iterate on small mechanical systems.",
+    tags: ["CAD", "3D Printing", "Mechanical Design", "Prototyping"],
     wireColor: WIRE_COLORS[3],
-    pinLabel: "B2",
   },
   {
     id: 5,
-    title: "Product Visualisation — 3D Renders",
-    category: "3D & Design",
+    title: "Honda Civic Engineering Projects",
+    category: "Automotive & Mechanical",
     description:
-      "Photorealistic 3D product mockups and packaging renders created for freelance clients using Blender. Focus on lighting, material accuracy, and commercial-grade output quality.",
-    tags: ["Blender", "3D Rendering", "Design"],
+      "Hands-on mechanical work and experimentation on my 2006 Honda Civic, including maintenance, diagnostics, and small modifications. A practical way of learning automotive systems and real-world mechanical engineering.",
+    tags: ["Automotive Systems", "Mechanical Engineering", "Diagnostics", "Problem Solving"],
     wireColor: WIRE_COLORS[4],
-    pinLabel: "C1",
-  },
-  {
-    id: 6,
-    title: "Propulsion System Concept Model",
-    category: "3D & Design",
-    description:
-      "Detailed 3D model of a turbojet engine cross-section for academic presentation. Modelled individual components including compressor stages, combustion chamber, and turbine assembly.",
-    tags: ["Blender", "CAD", "Propulsion"],
-    wireColor: WIRE_COLORS[5],
-    pinLabel: "C2",
   },
 ];
 
@@ -95,10 +79,10 @@ export default function Projects() {
 
         <FadeIn delay={0.1}>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-foreground mb-4">
-            On the <span className="text-accent">breadboard.</span>
+            Selected <span className="text-accent">Projects.</span>
           </h2>
           <p className="text-sm text-muted mb-16 max-w-lg">
-            Each project is a component plugged into the board — connected by shared skills and engineering discipline.
+            A selection of projects and experiments exploring software, embedded systems, and engineering concepts.
           </p>
         </FadeIn>
 
@@ -110,24 +94,10 @@ export default function Projects() {
             <StaggerItem key={project.id}>
               <BreadboardCard className="h-full" hover>
                 <div className="p-7 md:p-8 pt-7 pb-7 flex flex-col h-full">
-                  {/* Header row: pin label + category */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="row-label border border-border px-2 py-0.5 rounded-sm bg-white/60">
-                        {project.pinLabel}
-                      </span>
-                      <p className="text-[11px] tracking-[0.2em] uppercase text-accent/70 font-medium">
-                        {project.category}
-                      </p>
-                    </div>
-                    <div
-                      className="led-indicator"
-                      style={{
-                        color: `var(--color-led-${project.wireColor === "purple" ? "blue" : project.wireColor})`,
-                        backgroundColor: `var(--color-led-${project.wireColor === "purple" ? "blue" : project.wireColor})`,
-                      }}
-                    />
-                  </div>
+                  {/* Category */}
+                  <p className="text-[11px] tracking-[0.2em] uppercase text-accent/70 font-medium mb-4">
+                    {project.category}
+                  </p>
 
                   <h3 className="text-lg font-semibold text-foreground mb-3 leading-snug">
                     {project.title}

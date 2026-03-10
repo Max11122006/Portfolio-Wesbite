@@ -25,9 +25,9 @@ export default function Home() {
       <Navbar />
       <Hero />
       <About />
-      <Suspense fallback={<SectionFallback />}>
+      {/* <Suspense fallback={<SectionFallback />}>
         <Experience />
-      </Suspense>
+      </Suspense> */}
       <Suspense fallback={<SectionFallback />}>
         <Projects />
       </Suspense>
