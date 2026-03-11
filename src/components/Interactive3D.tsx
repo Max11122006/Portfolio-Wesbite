@@ -69,80 +69,157 @@ const airfoilPoints: [number, number][] = [
 const AIRFOIL = smoothPath(airfoilPoints) + " Z";
 
 // ---------------------------------------------------------------------------
-// Streamlines — skill labels flowing around the airfoil
-// Upper surface peaks at ~y=215, lower surface dips to ~y=295
+// Streamline generation — computed from airfoil data
 // ---------------------------------------------------------------------------
-interface Streamline {
-  path: string;
+
+// Linearly interpolate airfoil surface y/c at a given x/c
+function lerpSurface(xc: number, coords: [number, number][]): number {
+  if (xc <= coords[0][0]) return coords[0][1];
+  if (xc >= coords[coords.length - 1][0]) return coords[coords.length - 1][1];
+  for (let i = 0; i < coords.length - 1; i++) {
+    if (xc <= coords[i + 1][0]) {
+      const t = (xc - coords[i][0]) / (coords[i + 1][0] - coords[i][0]);
+      return coords[i][1] + t * (coords[i + 1][1] - coords[i][1]);
+    }
+  }
+  return 0;
+}
+
+function smoothstep(edge0: number, edge1: number, x: number): number {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
+
+// Generate a streamline SVG path from freestream y-position
+function makeStreamline(freeY: number, side: "upper" | "lower"): string {
+  const dist = Math.abs(freeY - CENTER_Y);
+  // Gap from surface: closer streamlines hug tighter, far ones stay loose
+  const gap = dist * 0.9 + 8;
+
+  const coords = side === "upper" ? UPPER_COORDS : LOWER_COORDS;
+  const numPoints = 45;
+  const points: [number, number][] = [];
+
+  for (let i = 0; i <= numPoints; i++) {
+    const x = -80 + (i / numPoints) * 1430; // -80 to 1350
+    const xc = (x - LE_X) / CHORD;
+
+    // Influence: gradual onset upstream, faster convergence downstream
+    let influence = 0;
+    if (xc >= -0.8 && xc <= 1.2) {
+      if (xc < 0) {
+        const t = smoothstep(-0.8, 0, xc);
+        influence = t * t; // squared for gentler onset
+      } else if (xc > 1) {
+        // Sharp convergence right after trailing edge
+        influence = 1 - smoothstep(1, 1.2, xc);
+      } else {
+        influence = 1;
+      }
+    }
+
+    let y = freeY;
+    if (influence > 0) {
+      const clamped = Math.max(0, Math.min(1, xc));
+      const surfaceYc = lerpSurface(clamped, coords);
+      const surfaceY = CENTER_Y - surfaceYc * CHORD;
+
+      const targetY =
+        side === "upper" ? surfaceY - gap : surfaceY + gap;
+
+      y = freeY + (targetY - freeY) * influence;
+    }
+
+    points.push([
+      Math.round(x * 10) / 10,
+      Math.round(y * 10) / 10,
+    ]);
+  }
+
+  return smoothPath(points);
+}
+
+// ---------------------------------------------------------------------------
+// Streamline definitions — freestream y spread across full section height
+// ViewBox: 0–550. Upper 5 lines: y=55–255. Lower 5 lines: y=295–495.
+// ~50px gaps between each entry point on the left edge.
+// ---------------------------------------------------------------------------
+interface StreamlineDef {
+  freeY: number;
+  side: "upper" | "lower";
   skill: string;
   duration: number;
   offset: number;
 }
 
-const STREAMLINES: Streamline[] = [
-  // === OVER THE TOP ===
-  // Close to upper surface (clears y~210)
-  { path: "M -80 270 C 100 265, 200 245, 300 222 C 400 205, 480 198, 580 198 C 700 198, 790 208, 860 225 C 920 240, 960 258, 1040 268 C 1120 272, 1200 273, 1350 273", skill: "Python", duration: 14000, offset: 0 },
-  { path: "M -80 258 C 100 250, 200 225, 300 205 C 400 188, 480 180, 580 180 C 700 180, 790 192, 860 210 C 920 228, 960 248, 1040 258 C 1120 262, 1200 262, 1350 262", skill: "Arduino", duration: 15000, offset: 2000 },
-  // Medium distance above
-  { path: "M -80 238 C 100 228, 200 198, 300 172 C 400 150, 500 140, 600 140 C 720 142, 800 158, 870 182 C 930 205, 970 228, 1050 240 C 1130 246, 1220 244, 1350 243", skill: "Embedded Systems", duration: 16000, offset: 3500 },
-  // Far above
-  { path: "M -80 205 C 100 195, 220 162, 340 132 C 440 108, 540 98, 640 98 C 740 100, 820 118, 890 148 C 940 170, 980 200, 1060 212 C 1140 218, 1220 216, 1350 215", skill: "Computer Vision", duration: 15500, offset: 5500 },
-  // Very far above
-  { path: "M -80 165 C 120 158, 260 125, 400 100 C 520 80, 640 72, 730 75 C 810 80, 880 100, 950 128 C 1010 150, 1060 165, 1150 170 C 1230 172, 1290 171, 1350 170", skill: "Engineering Simulation", duration: 17000, offset: 7000 },
-  // Highest
-  { path: "M -80 128 C 150 122, 320 98, 480 78 C 600 65, 700 62, 790 68 C 860 75, 930 95, 990 118 C 1040 135, 1100 132, 1180 130 C 1250 129, 1300 128, 1350 128", skill: "C++", duration: 16500, offset: 1200 },
-
-  // === UNDER THE BOTTOM (lower surface ~y=295) ===
-  { path: "M -80 285 C 100 290, 200 300, 320 308 C 420 314, 540 316, 640 314 C 740 310, 820 302, 880 290 C 920 282, 960 278, 1040 280 C 1120 282, 1200 283, 1350 283", skill: "3D Printing", duration: 14500, offset: 4000 },
-  { path: "M -80 315 C 100 320, 200 335, 320 345 C 420 352, 540 354, 640 350 C 740 344, 820 332, 880 315 C 920 304, 960 300, 1040 304 C 1120 307, 1200 308, 1350 308", skill: "Mechanical Prototyping", duration: 16000, offset: 6000 },
-  { path: "M -80 352 C 100 358, 220 375, 360 388 C 480 396, 600 398, 700 392 C 790 385, 860 370, 920 352 C 970 340, 1020 337, 1100 340 C 1180 342, 1250 342, 1350 342", skill: "Data Analysis", duration: 15000, offset: 8500 },
-  { path: "M -80 395 C 150 398, 320 412, 480 420 C 600 426, 700 426, 790 422 C 860 416, 920 405, 980 395 C 1040 388, 1100 387, 1180 388 C 1250 389, 1300 389, 1350 389", skill: "GitHub", duration: 17500, offset: 10000 },
+const STREAMLINE_DEFS: StreamlineDef[] = [
+  // Upper — tighter spacing, all within ~100px above centerline
+  { freeY: 260, side: "upper", skill: "Python",               duration: 9000,  offset: 0 },
+  { freeY: 240, side: "upper", skill: "Arduino",              duration: 10000, offset: 2000 },
+  { freeY: 220, side: "upper", skill: "Embedded Systems",     duration: 11000, offset: 4500 },
+  { freeY: 200, side: "upper", skill: "Computer Vision",      duration: 10500, offset: 7000 },
+  { freeY: 180, side: "upper", skill: "C++",                  duration: 12000, offset: 1500 },
+  // Lower — tighter spacing, all within ~100px below centerline
+  { freeY: 290, side: "lower", skill: "3D Printing",          duration: 9500,  offset: 3000 },
+  { freeY: 310, side: "lower", skill: "Mechanical Prototyping", duration: 11000, offset: 5500 },
+  { freeY: 330, side: "lower", skill: "Data Analysis",        duration: 10000, offset: 8000 },
+  { freeY: 350, side: "lower", skill: "Engineering Simulation", duration: 11500, offset: 6000 },
+  { freeY: 370, side: "lower", skill: "GitHub",               duration: 12000, offset: 9500 },
 ];
 
+// Pre-compute all streamline SVG paths from airfoil data
+const STREAMLINES = STREAMLINE_DEFS.map((s) => ({
+  ...s,
+  path: makeStreamline(s.freeY, s.side),
+}));
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 function StreamlineSkills() {
   const svgRef = useRef<SVGSVGElement>(null);
   const textRefs = useRef<(SVGTextElement | null)[]>([]);
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
-  const startTime = useRef(0);
+  const rafRef = useRef(0);
 
   useEffect(() => {
-    startTime.current = Date.now();
-    let raf: number;
+    const start = performance.now();
 
-    const animate = () => {
-      const now = Date.now() - startTime.current;
+    const animate = (now: number) => {
+      const elapsed = now - start;
 
-      STREAMLINES.forEach((s, i) => {
+      for (let i = 0; i < STREAMLINES.length; i++) {
+        const s = STREAMLINES[i];
         const textEl = textRefs.current[i];
         const pathEl = pathRefs.current[i];
-        if (!textEl || !pathEl) return;
+        if (!textEl || !pathEl) continue;
 
         const totalLen = pathEl.getTotalLength();
-        const elapsed = (now + s.offset) % s.duration;
-        const progress = elapsed / s.duration;
-        const len = progress * totalLen;
+        const t = ((elapsed + s.offset) % s.duration) / s.duration;
+        const len = t * totalLen;
 
         const pt = pathEl.getPointAtLength(len);
-
-        // Get tangent angle
         const pt2 = pathEl.getPointAtLength(Math.min(len + 2, totalLen));
-        const angle = Math.atan2(pt2.y - pt.y, pt2.x - pt.x) * (180 / Math.PI);
+        const angle =
+          Math.atan2(pt2.y - pt.y, pt2.x - pt.x) * (180 / Math.PI);
 
-        textEl.setAttribute("transform", `translate(${pt.x}, ${pt.y}) rotate(${angle})`);
+        textEl.setAttribute(
+          "transform",
+          `translate(${pt.x},${pt.y}) rotate(${angle})`
+        );
 
-        // Fade in/out at edges
+        // Fade in/out at path edges
         let opacity = 1;
-        if (progress < 0.08) opacity = progress / 0.08;
-        else if (progress > 0.92) opacity = (1 - progress) / 0.08;
+        if (t < 0.07) opacity = t / 0.07;
+        else if (t > 0.93) opacity = (1 - t) / 0.07;
         textEl.setAttribute("opacity", String(opacity));
-      });
+      }
 
-      raf = requestAnimationFrame(animate);
+      rafRef.current = requestAnimationFrame(animate);
     };
 
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
   return (
@@ -152,7 +229,7 @@ function StreamlineSkills() {
       className="w-full h-full"
       preserveAspectRatio="xMidYMid meet"
     >
-      {/* Streamline paths (thin dashed lines) */}
+      {/* Streamline paths — thin dashed lines */}
       {STREAMLINES.map((s, i) => (
         <path
           key={`line-${i}`}
@@ -160,13 +237,13 @@ function StreamlineSkills() {
           d={s.path}
           fill="none"
           stroke="#b0a898"
-          strokeWidth="0.8"
-          strokeDasharray="6 10"
-          opacity="0.2"
+          strokeWidth="0.7"
+          strokeDasharray="5 8"
+          opacity="0.3"
         />
       ))}
 
-      {/* Airfoil shape — generated from Göttingen 386 coordinates */}
+      {/* Airfoil shape */}
       <path
         d={AIRFOIL}
         fill="#e8e4de"
@@ -175,7 +252,7 @@ function StreamlineSkills() {
         strokeLinejoin="round"
       />
 
-      {/* Skill labels (positioned by JS) */}
+      {/* Skill labels — animated along paths */}
       {STREAMLINES.map((s, i) => (
         <text
           key={`text-${i}`}
@@ -186,6 +263,7 @@ function StreamlineSkills() {
           textAnchor="middle"
           dominantBaseline="middle"
           opacity="0"
+          style={{ willChange: "transform, opacity" }}
         >
           {s.skill}
         </text>
@@ -196,9 +274,17 @@ function StreamlineSkills() {
 
 export default function Interactive3D() {
   return (
-    <section className="relative overflow-hidden" style={{ height: "550px" }}>
+    <section className="relative overflow-hidden py-24 md:py-32">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-surface-alt/30 to-background pointer-events-none" />
-      <div className="relative z-10 w-full h-full px-6 py-12 max-w-6xl mx-auto">
+      <div className="relative z-10 px-6 max-w-6xl mx-auto">
+        <p className="text-xs tracking-[0.25em] uppercase text-muted mb-6 font-mono">
+          // SKILLS
+        </p>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-foreground mb-3">
+          Engineering <span className="text-accent">Stack.</span>
+        </h2>
+      </div>
+      <div className="relative z-10 w-full px-6 max-w-6xl mx-auto" style={{ height: "550px" }}>
         <StreamlineSkills />
       </div>
     </section>
