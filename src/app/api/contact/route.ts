@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     }
 
     // Send notification to site owner
-    await resend.emails.send({
+    const { error: notifyError } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: CONTACT_EMAIL,
       subject: `New message from ${name}`,
@@ -39,8 +39,16 @@ export async function POST(req: Request) {
       ].join("\n"),
     });
 
+    if (notifyError) {
+      console.error("Resend notification error:", notifyError);
+      return NextResponse.json(
+        { error: notifyError.message || "Failed to send email." },
+        { status: 500 }
+      );
+    }
+
     // Send confirmation to the sender
-    await resend.emails.send({
+    const { error: confirmError } = await resend.emails.send({
       from: "Max Dubowski <onboarding@resend.dev>",
       to: email,
       subject: "Message received — Max Dubowski",
@@ -53,8 +61,14 @@ export async function POST(req: Request) {
       ].join("\n"),
     });
 
+    if (confirmError) {
+      console.error("Resend confirmation error:", confirmError);
+      // Still return success since the main notification was sent
+    }
+
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error("Contact API error:", err);
     return NextResponse.json(
       { error: "Something went wrong. Please try again." },
       { status: 500 }
