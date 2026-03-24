@@ -3,48 +3,52 @@
 import { FadeIn, StaggerContainer, StaggerItem } from "./MotionPrimitives";
 import BreadboardCard from "./BreadboardCard";
 
+/* ── Data ──────────────────────────────────────────────────────────── */
+
 const skills = [
   {
-    category: "Engineering",
+    category: "Aerospace Engineering",
     items: [
-      "Aerodynamics & Flight Mechanics",
+      "Aerodynamics & Flight Performance",
+      "Fluid & Thermal Systems",
       "Structural Analysis (FEA)",
-      "Propulsion Systems",
-      "Thermodynamics & Fluid Dynamics",
-      "Control Systems Theory",
+      "Propulsion & Energy Systems",
+      "Control Systems & Dynamics",
     ],
   },
   {
-    category: "Software",
+    category: "Software & Development",
     items: [
-      "Python & MATLAB",
-      "C / C++",
-      "TypeScript / React / Next.js",
+      "Python, MATLAB & C++",
       "Data Analysis & Visualisation",
-      "Git & CI/CD Workflows",
+      "React / Next.js / TypeScript",
+      "Git, CI/CD & Version Control",
+      "Embedded Systems (Arduino)",
     ],
   },
   {
-    category: "Operations",
+    category: "Systems & Projects",
     items: [
-      "Property & Asset Management",
-      "Tenant Relations & Compliance",
-      "Financial Reporting",
-      "Project Planning & Scheduling",
-      "Risk Assessment",
+      "Hardware–Software Integration",
+      "Sensor Systems & Automation",
+      "Rapid Prototyping & Testing",
+      "Engineering Problem Solving",
+      "Technical Project Development",
     ],
   },
   {
-    category: "Design",
+    category: "Design & Visualisation",
     items: [
-      "3D Modelling (Blender & SolidWorks)",
-      "Product Visualisation",
-      "Brand Identity Design",
+      "3D Modelling (SolidWorks & Blender)",
+      "Engineering Visualisation",
+      "Product & Concept Rendering",
       "UI/UX Fundamentals",
       "Adobe Creative Suite",
     ],
   },
 ];
+
+/* ── Component ─────────────────────────────────────────────────────── */
 
 export default function Skills() {
   return (
@@ -61,35 +65,31 @@ export default function Skills() {
 
         <FadeIn delay={0.1}>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.15] text-foreground mb-16">
-            Core <span className="text-accent">competencies.</span>
+            Core <span className="text-accent">Competencies.</span>
           </h2>
         </FadeIn>
 
         <StaggerContainer
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           staggerDelay={0.12}
         >
           {skills.map((group) => (
             <StaggerItem key={group.category}>
-              <BreadboardCard className="h-full">
+              <BreadboardCard hover className="h-full">
                 <div className="p-6 pt-8 pb-8">
                   <h3 className="text-xs tracking-[0.2em] uppercase text-accent font-medium font-mono mb-5">
                     {group.category}
                   </h3>
+
+                  <div className="w-8 h-px bg-accent/30 mb-5" />
+
                   <ul className="space-y-3">
-                    {group.items.map((item, i) => (
+                    {group.items.map((item) => (
                       <li
                         key={item}
                         className="flex items-start gap-2.5 text-sm text-muted leading-relaxed"
                       >
-                        <span
-                          className="w-2 h-2 rounded-full shrink-0 mt-1.5"
-                          style={{
-                            backgroundColor: `var(--color-led-${
-                              ["red", "green", "blue", "yellow"][i % 4]
-                            })`,
-                          }}
-                        />
+                        <span className="w-1.5 h-px bg-accent/50 shrink-0 mt-[10px]" />
                         {item}
                       </li>
                     ))}
