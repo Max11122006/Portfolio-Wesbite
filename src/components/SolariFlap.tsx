@@ -37,7 +37,7 @@ export default function SolariFlap({ targetChar, delay, color = "white" }: Solar
         setFlipPhase("idle");
 
         if (cyclesLeft.current > 0) {
-          const speed = 60 + cyclesLeft.current * 15;
+          const speed = 40 + cyclesLeft.current * 10;
           timeoutRef.current = setTimeout(() => flipNext(), speed);
         }
       }, 120);
@@ -45,7 +45,7 @@ export default function SolariFlap({ targetChar, delay, color = "white" }: Solar
   }, [targetChar]);
 
   useEffect(() => {
-    const totalCycles = 3 + Math.floor(Math.random() * 3);
+    const totalCycles = 2 + Math.floor(Math.random() * 2);
     cyclesLeft.current = totalCycles;
 
     timeoutRef.current = setTimeout(() => {

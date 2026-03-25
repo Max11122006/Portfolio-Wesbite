@@ -30,7 +30,7 @@ export function FadeIn({
     <motion.div
       initial={{ opacity: 0, ...directionMap[direction] }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       transition={{ ...transition, delay }}
       className={className}
     >
@@ -52,7 +52,7 @@ export function ScaleIn({
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       transition={{ ...transition, delay }}
       className={className}
     >
@@ -74,7 +74,7 @@ export function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, margin: "-80px" }}
+      viewport={{ once: true, margin: "-80px" }}
       variants={{
         hidden: {},
         visible: {
