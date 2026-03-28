@@ -6,6 +6,7 @@ export interface Project {
   description: string;
   tags: string[];
   image: string;
+  heroImage?: string;
   status: "active" | "completed" | "in-progress";
   github?: string;
 }
@@ -71,6 +72,7 @@ export const allProjects: Project[] = [
       "Hands-on mechanical work including diagnostics, maintenance, and component-level modifications on a 2006 Honda Civic. Applied real-world engineering principles to understand automotive systems and improve performance and reliability.",
     tags: ["Automotive Systems", "Mechanical Engineering", "Diagnostics", "Problem Solving"],
     image: "/projects/honda-civic.jpg",
+    heroImage: "/projects/honda/hero.jpg",
     status: "active",
   },
   {
@@ -113,5 +115,5 @@ export const allProjects: Project[] = [
 
 /** Hand-picked projects shown on the homepage */
 export const selectedProjects = allProjects.filter((p) =>
-  ["missile-trajectory-tracker", "3d-printing-prototyping", "honda-civic-projects", "crude-flow", "friendly"].includes(p.slug)
+  ["missile-trajectory-tracker", "3d-printing-prototyping", "honda-civic-projects", "crude-flow", "friendly", "portfolio-website"].includes(p.slug)
 );
