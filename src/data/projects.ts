@@ -54,13 +54,14 @@ export const allProjects: Project[] = [
   },
   {
     id: 4,
-    title: "3D Printing & Mechanical Prototyping",
+    title: "3D Printer",
     slug: "3d-printing-prototyping",
     category: "Design & Fabrication",
     description:
       "Iterative design and fabrication of mechanical components using CAD and 3D printing. Focused on rapid prototyping, testing design constraints, and refining functional parts for small-scale engineering systems.",
     tags: ["CAD", "3D Printing", "Mechanical Design", "Prototyping"],
     image: "/projects/3d-printing.jpg",
+    heroImage: "/projects/3d-printing.jpg",
     status: "active",
   },
   {
