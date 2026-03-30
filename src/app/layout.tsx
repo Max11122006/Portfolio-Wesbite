@@ -17,11 +17,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Maksymilian Dubowski — Aerospace Engineering & Operations",
+  title: "Max Dubowski",
   description:
     "Aerospace engineering student at Heriot-Watt University. Future commercial pilot. Systems thinker with experience in property management, software engineering, and design.",
   keywords: [
-    "aerospace engineering",
+    "aerospace engineerisng",
     "commercial pilot",
     "Heriot-Watt",
     "Edinburgh",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "Maksymilian Dubowski",
   ],
   openGraph: {
-    title: "Maksymilian Dubowski — Aerospace Engineering & Operations",
+    title: "Max Dubowski",
     description:
       "Aerospace engineering student. Future commercial pilot. Systems thinker.",
     type: "website",
